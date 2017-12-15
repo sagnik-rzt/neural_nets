@@ -58,8 +58,6 @@ def main():
     W1 = tf.Variable(tf.random_normal(shape = [input_neurons, hidden_layers]), dtype = tf.float32)
     W2 = tf.Variable(tf.random_normal(shape = [hidden_layers, output_neurons]), dtype = tf.float32)
 
-    #Now that we have configured our neural network, it's time to train the classifier
-
     #Forward propagation
     y_hat = forward_prop(X, W1, W2)
     y_predict = tf.cast(tf.argmax(y_hat, axis = 1), tf.float32)
