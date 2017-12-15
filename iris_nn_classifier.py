@@ -17,8 +17,8 @@ def forward_prop(x, w1, w2):
 
     z1 = tf.matmul(x, w1)
     a1 = tf.nn.sigmoid(z1)
-    y_predicted = tf.matmul(a1, w2)
-    return y_predicted
+    score = tf.matmul(a1, w2)
+    return score
 
 
 def get_data():
