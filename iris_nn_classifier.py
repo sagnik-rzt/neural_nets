@@ -72,13 +72,13 @@ def main():
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
 
-        for epoch in range(100):
+        for epoch in range(1000):
             #Train using each example, i.e. batch-size = 1
             for i in range(len(x_train)):
                 sess.run(update_weights, feed_dict = {X : x_train[i : i+1] , Y : y_train[i : i+1]})
 
             training_accuracy = np.mean(np.argmax(y_train, axis = 1) == sess.run(y_predict, feed_dict = {X : x_train, Y : y_train}))
-            testing_accuracy =  np.mean(np.argmax(y_train, axis = 1) == sess.run(y_predict, feed_dict = {X : x_train, Y : y_train}))
+            testing_accuracy =  np.mean(np.argmax(y_test, axis = 1) == sess.run(y_predict, feed_dict = {X : x_test, Y : y_test}))
 
             print("epoch = %d, training_accuracy = %f, testing_accuracy = %f"%(epoch, training_accuracy, testing_accuracy))
 
