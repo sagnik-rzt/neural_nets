@@ -69,10 +69,14 @@ def main():
     #Now let's run the tensorflow session
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
+        batch_size = 14
 
-        for epoch in range(2000):
+        for epoch in range(1000):
             x_train, x_test, y_train, y_test = get_data()
-            sess.run(update_weights, feed_dict = {X : x_train , Y : y_train})
+
+            for i in range(len(x_train)):
+            #Perform mini-batch gradient descent for a mini-batch of size 'batch_size'
+                sess.run(update_weights, feed_dict = {X : x_train[i : i+batch_size] , Y : y_train[i : i+batch_size]})
 
             training_accuracy = np.mean(np.argmax(y_train, axis = 1) == sess.run(y_predict, feed_dict = {X : x_train, Y : y_train}))
             testing_accuracy =  np.mean(np.argmax(y_test, axis = 1) == sess.run(y_predict, feed_dict = {X : x_test, Y : y_test}))
