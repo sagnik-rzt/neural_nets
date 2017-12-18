@@ -14,9 +14,10 @@ tf.set_random_seed(random_seed)
 
 def forward_prop(x, w1, w2):
     #Forward propagation of the input-data tensor 'x' across the layers of neurons
+    #Activation function is the sigmoid or logistic function.
 
     z1 = tf.matmul(x, w1)
-    a1 = tf.nn.sigmoid(z1)
+    a1 = tf.nn.tanh(z1)
     score = tf.matmul(a1, w2)
     return score
 
@@ -42,15 +43,14 @@ def get_data():
 
 
 def main():
-    x_train, x_test, y_train, y_test = get_data()
 
     #Now let's configure the neural network
     #Total 5 input neurons; 4 feature neurons and 1 bias neuron
-    input_neurons = x_train.shape[1]
+    input_neurons = 5
     #50 neurons in the hidden layer
     hidden_layers = 50
     #3 classes of Iris flowers, so 3 output neurons.
-    output_neurons = y_train.shape[1]
+    output_neurons = 3
 
     X = tf.placeholder(dtype= tf.float32, shape = [None, input_neurons])
     Y = tf.placeholder(dtype = tf.float32, shape = [None, output_neurons])
@@ -59,8 +59,8 @@ def main():
     W2 = tf.Variable(tf.random_normal(shape = [hidden_layers, output_neurons]), dtype = tf.float32)
 
     #Forward propagation
-    y_hat = forward_prop(X, W1, W2)
-    y_predict = tf.cast(tf.argmax(y_hat, axis = 1), tf.float32)
+    y_hat = forward_prop(X, W1, W2) #The hypothesis vector
+    y_predict = tf.cast(tf.argmax(y_hat, axis = 1), tf.float32)  #Getting the final score from the hypothesis vector
 
     #Backward propagation
     cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels = Y, logits = y_hat))
@@ -70,10 +70,9 @@ def main():
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
 
-        for epoch in range(1000):
-            #Train using each example, i.e. batch-size = 1
-            for i in range(len(x_train)):
-                sess.run(update_weights, feed_dict = {X : x_train[i : i+1] , Y : y_train[i : i+1]})
+        for epoch in range(2000):
+            x_train, x_test, y_train, y_test = get_data()
+            sess.run(update_weights, feed_dict = {X : x_train , Y : y_train})
 
             training_accuracy = np.mean(np.argmax(y_train, axis = 1) == sess.run(y_predict, feed_dict = {X : x_train, Y : y_train}))
             testing_accuracy =  np.mean(np.argmax(y_test, axis = 1) == sess.run(y_predict, feed_dict = {X : x_test, Y : y_test}))
