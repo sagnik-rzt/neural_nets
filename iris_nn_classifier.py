@@ -61,12 +61,13 @@ def main():
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
         x_train, x_test, y_train, y_test = get_data()
+        batch_size = 10
 
         for epoch in range(100):
 
-            for i in range(0, len(x_train), 10):
+            for i in range(0, len(x_train), batch_size):
             #Perform mini-batch gradient descent for a mini-batch of size 'batch_size'
-                sess.run(update_weights, feed_dict = {X : x_train[i : i+10] , Y : y_train[i : i+10]})
+                sess.run(update_weights, feed_dict = {X : x_train[i : i+batch_size] , Y : y_train[i : i+batch_size]})
 
             print("epoch = %d, cost = %f"%(epoch, sess.run(cost, feed_dict = {X : x_train, Y : y_train})))
 
