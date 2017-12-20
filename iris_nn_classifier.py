@@ -7,11 +7,7 @@
 import tensorflow as tf
 import numpy as np
 import pandas as pd
-from sklearn import datasets
-from sklearn.model_selection import train_test_split
 
-# random_seed = 6
-# tf.set_random_seed(random_seed)
 
 def forward_prop(x, w1, w2, b1, b2):
     #Forward propagation of the input-data tensor 'x' across the layers of neurons
@@ -22,12 +18,12 @@ def forward_prop(x, w1, w2, b1, b2):
     score = tf.matmul(a1, w2) + b2
     return score
 
-def get_data():
+def get_data(train_fraction = 0.7):
     data = pd.read_csv(filepath_or_buffer = "iris_dataset.csv")
     data.columns = ['x1', 'x2', 'x3', 'x4', 'y1', 'y2', 'y3']
-    train_set = data.take(np.random.permutation(len(data)) [:105])
+    train_set = data.take(np.random.permutation(len(data)) [:int((train_fraction * len(data)))])
     x_train, y_train = train_set[['x1', 'x2', 'x3', 'x4']], train_set[['y1', 'y2', 'y3']]
-    test_set = data.take(np.random.permutation(len(data)) [:35])
+    test_set = data.take(np.random.permutation(len(data)) [:int((1 - train_fraction) * len(data))])
     x_test, y_test = test_set[['x1', 'x2', 'x3', 'x4']], test_set[['y1', 'y2', 'y3']]
 
     return x_train, x_test, y_train, y_test
@@ -45,9 +41,12 @@ def main():
     X = tf.placeholder(dtype= tf.float32, shape = [None, input_neurons])
     Y = tf.placeholder(dtype = tf.float32, shape = [None, output_neurons])
 
+    #Weights and biases for the first layer
     W1 = tf.Variable(tf.random_normal(shape = [input_neurons, hidden_layers]), dtype = tf.float32)
+    B1 = tf.Variable(tf.random_normal(shape=[1, hidden_layers]), dtype=tf.float32)
+
+    #Weights and biases for the second layer
     W2 = tf.Variable(tf.random_normal(shape = [hidden_layers, output_neurons]), dtype = tf.float32)
-    B1 = tf.Variable(tf.random_normal(shape = [1, hidden_layers]), dtype = tf.float32)
     B2 = tf.Variable(tf.random_normal(shape = [1, output_neurons]), dtype = tf.float32)
 
     #Forward propagation
@@ -63,12 +62,12 @@ def main():
         x_train, x_test, y_train, y_test = get_data()
         batch_size = 10
 
-        for epoch in range(100):
+        for epoch in range(1000):
 
             for i in range(0, len(x_train), batch_size):
             #Perform mini-batch gradient descent for a mini-batch of size 'batch_size'
                 sess.run(update_weights, feed_dict = {X : x_train[i : i+batch_size] , Y : y_train[i : i+batch_size]})
 
-            print("epoch = %d, cost = %f"%(epoch, sess.run(cost, feed_dict = {X : x_train, Y : y_train})))
+            print("epoch = %d, cost = %f"%(epoch, sess.run(cost, feed_dict = {X : x_test, Y : y_test})))
 
 main()
