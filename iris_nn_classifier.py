@@ -21,6 +21,8 @@ def forward_prop(x, w1, w2, b1, b2):
 
 
 def get_data(train_fraction = 0.7):
+    #Returns a randomly generated training and testing set. The samples are drawn out of the
+    #iris dataset with replacement.
 
     data = pd.read_csv(filepath_or_buffer = "iris_dataset.csv")
     data.columns = ['x1', 'x2', 'x3', 'x4', 'y1', 'y2', 'y3']
