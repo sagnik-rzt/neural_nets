@@ -10,19 +10,24 @@ import pandas as pd
 
 
 def forward_prop(x, w1, w2, b1, b2):
+
     #Forward propagation of the input-data tensor 'x' across the layers of neurons
     #Activation function is the sigmoid or logistic function.
-
     z1 = tf.matmul(x, w1) + b1
     a1 = tf.nn.tanh(z1)
     score = tf.matmul(a1, w2) + b2
+
     return score
 
+
 def get_data(train_fraction = 0.7):
+
     data = pd.read_csv(filepath_or_buffer = "iris_dataset.csv")
     data.columns = ['x1', 'x2', 'x3', 'x4', 'y1', 'y2', 'y3']
+
     train_set = data.take(np.random.permutation(len(data)) [:int((train_fraction * len(data)))])
     x_train, y_train = train_set[['x1', 'x2', 'x3', 'x4']], train_set[['y1', 'y2', 'y3']]
+
     test_set = data.take(np.random.permutation(len(data)) [:int((1 - train_fraction) * len(data))])
     x_test, y_test = test_set[['x1', 'x2', 'x3', 'x4']], test_set[['y1', 'y2', 'y3']]
 
@@ -41,11 +46,11 @@ def main():
     X = tf.placeholder(dtype= tf.float32, shape = [None, input_neurons])
     Y = tf.placeholder(dtype = tf.float32, shape = [None, output_neurons])
 
-    #Weights and biases for the first layer
+    #Weights and biases for the hidden layer
     W1 = tf.Variable(tf.random_normal(shape = [input_neurons, hidden_layers]), dtype = tf.float32)
     B1 = tf.Variable(tf.random_normal(shape=[1, hidden_layers]), dtype=tf.float32)
 
-    #Weights and biases for the second layer
+    #Weights and biases for the output layer
     W2 = tf.Variable(tf.random_normal(shape = [hidden_layers, output_neurons]), dtype = tf.float32)
     B2 = tf.Variable(tf.random_normal(shape = [1, output_neurons]), dtype = tf.float32)
 
