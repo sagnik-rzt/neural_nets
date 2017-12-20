@@ -63,8 +63,9 @@ def main():
 
     #Now let's run the tensorflow session
     with tf.Session() as sess:
-        sess.run(tf.global_variables_initializer())
+
         x_train, x_test, y_train, y_test = get_data()
+        sess.run(tf.global_variables_initializer())
         batch_size = 10
 
         for epoch in range(1000):
