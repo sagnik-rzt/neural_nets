@@ -73,7 +73,8 @@ def main():
 
         for epoch in range(1000):
 
-            for i in range(0, len(x_train) - batch_size, batch_size):
+            batches = len(x_train) % batch_size
+            for i in range(0, batches * batch_size, batch_size):
             #Perform mini-batch gradient descent for a mini-batch of size 'batch_size'
                 sess.run(update_weights, feed_dict = {X : x_train[i : i+batch_size] , Y : y_train[i : i+batch_size]})
 
