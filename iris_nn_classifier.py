@@ -70,10 +70,10 @@ def main():
         x_train, x_test, y_train, y_test = get_data()
         sess.run(tf.global_variables_initializer())
         batch_size = 10
+        batches = len(x_train) % batch_size
 
         for epoch in range(1000):
 
-            batches = len(x_train) % batch_size
             for i in range(0, batches * batch_size, batch_size):
             #Perform mini-batch gradient descent for a mini-batch of size 'batch_size'
                 sess.run(update_weights, feed_dict = {X : x_train[i : i+batch_size] , Y : y_train[i : i+batch_size]})
