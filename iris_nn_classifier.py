@@ -9,7 +9,7 @@ import numpy as np
 import pandas as pd
 
 
-def forward_prop(x, w1, w2, b1, b2):
+def hypothesis(x, w1, w2, b1, b2):
 
     #Forward propagation of the input-data tensor 'x' across the layers of neurons
     #Activation function is the sigmoid or logistic function.
@@ -57,9 +57,9 @@ def main():
     B2 = tf.Variable(tf.random_normal(shape = [1, output_neurons]), dtype = tf.float32)
 
     #Forward propagation
-    y_hat = forward_prop(X, W1, W2, B1, B2) #The hypothesis vector
+    y_hat = hypothesis(X, W1, W2, B1, B2) #The hypothesis vector
     #Note that here we are not using a softmax function on y_hat since
-    # tf.nn.softmax_cross_entropy_with_logits() does that for us.
+    # tf.nn.softmax_cross_entropy_with_logits() already does that for us.
 
 
     #Backward propagation
